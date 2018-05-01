@@ -3,12 +3,37 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
-    <script src="../Scripts/jquery-1.10.2.js"></script>
+    <script src="../Scripts/jquery-1.10.2.js">
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var ulCustomer = $('#ulCustomer');
+
+            $('#getCustomerbtn').click(function () {                
+                $.ajax ({
+                    type : 'GET',
+                    url: 'http://localhost:53742/api/customer',
+                    dataType: 'json',
+                    success: function (data) {
+                        ulCustomer.empty();
+                        $.each(data, function (index, val) {
+                            var fullName = val.FirstName.toUpperCase() + ' ' + val.LastName.toUpperCase();
+                            ulCustomer.append('<li>' + fullName +'</li>')
+                        });
+                        }                        
+                });
+            });
+            $('#clearCustomerbtn').click(function () {
+                ulCustomer.empty();
+            });
+        });
+    </script>
 </head>
 <body>
     <div>
         <input id="getCustomerbtn" type="button" value="Get Customer" />
         <input id="clearCustomerbtn" type="button" value="Clear" />
+        <ul id="ulCustomer"></ul>
     </div>
 </body>
 </html>
