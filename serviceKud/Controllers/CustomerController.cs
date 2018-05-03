@@ -6,15 +6,17 @@ using System.Net.Http;
 using System.Web.Http;
 using CustomerServices;
 using System.Web.Http.Cors;
+using System.Web.Mvc;
 
 namespace serviceKud.Controllers
 {
-    [EnableCorsAttribute("http://localhost:53742/", "*","*")]
+        
+    [RequiredHttps]
     public class CustomerController : ApiController
     {
         // http://localhost:53742/api/customer?gender=male
-        [DisableCors]
-        [HttpGet]
+        // [DisableCors]
+        [System.Web.Http.HttpGet]
         public HttpResponseMessage AllGet(string gender="all")
         {
             try

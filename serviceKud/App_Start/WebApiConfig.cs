@@ -11,10 +11,13 @@ namespace serviceKud
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-        //    EnableCorsAttribute cors = new EnableCorsAttribute("*","*","*");
-         //   config.EnableCors(cors);
+            EnableCorsAttribute cors = new EnableCorsAttribute("*", "*", "*");
+            config.EnableCors(cors);
+            // config.Filters.Add(new RequiredHttpsAttribute());
+            config.Filters.Add(new RequiredHttpsAttribute());
             // Web API routes
             config.MapHttpAttributeRoutes();
+
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
