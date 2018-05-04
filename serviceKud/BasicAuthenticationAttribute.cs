@@ -38,7 +38,7 @@ namespace serviceKud
                 }
 
             }
-            base.OnAuthorization(actionContext);
+           
         }
     }
 }

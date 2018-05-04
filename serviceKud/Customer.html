@@ -11,8 +11,7 @@
             var username = $('#username');
             var password = $('#password');
             
-            $('#getCustomerbtn').click(function () {
-                debugger;
+            $('#getCustomerbtn').click(function () {                
                 $.ajax ({
                     type : 'GET',
                     url: 'http://localhost:53742/api/customer',
@@ -24,8 +23,7 @@
                         ulCustomer.empty();
                         $.each(data, function (index, val) {
                             var fullName = val.FirstName.toUpperCase() + ' ' + val.LastName.toUpperCase();
-                            ulCustomer.append('<li>' + fullName + '</li>');
-                            console.log('val is -' , val);
+                            ulCustomer.append('<li>' + fullName + '</li>');                           
                         });
                     },
                     complete: function (jqXHR) {
