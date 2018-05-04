@@ -8,19 +8,34 @@
     <script type="text/javascript">
         $(document).ready(function () {
             var ulCustomer = $('#ulCustomer');
-
-            $('#getCustomerbtn').click(function () {                
+            var username = $('#username');
+            var password = $('#password');
+            
+            $('#getCustomerbtn').click(function () {
+                debugger;
                 $.ajax ({
                     type : 'GET',
-                    url: 'https://localhost:44346/api/customer',
+                    url: 'http://localhost:53742/api/customer',
                     dataType: 'json',
+                    headers: {
+                        'Authorization': btoa(username + ':' + password)
+                    },
                     success: function (data) {
                         ulCustomer.empty();
                         $.each(data, function (index, val) {
                             var fullName = val.FirstName.toUpperCase() + ' ' + val.LastName.toUpperCase();
-                            ulCustomer.append('<li>' + fullName +'</li>')
+                            ulCustomer.append('<li>' + fullName + '</li>');
+                            console.log('val is -' , val);
                         });
-                        }                        
+                    },
+                    complete: function (jqXHR) {
+                        if (jqXHR.status == '401') {
+                            ulCustomer.empty();
+                            ulCustomer.append('<li style="color:red">'
+                                + jqXHR.status + ' : ' + jqXHR.statusText + '</li>');
+                        }
+                    }
+
                 });
             });
             $('#clearCustomerbtn').click(function () {
@@ -31,7 +46,9 @@
 </head>
 <body>
     <div>
-        <input id="getCustomerbtn" type="button" value="Get Customer" />
+        <input id="username" type="text" name="username" /> 
+        <input id="password" type="password" name ="password" /> <br/> <br/>
+        <input id="getCustomerbtn" type="button" value="Auth & Get Customer" />
         <input id="clearCustomerbtn" type="button" value="Clear" />
         <ul id="ulCustomer"></ul>
     </div>

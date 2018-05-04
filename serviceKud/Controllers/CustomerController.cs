@@ -7,32 +7,35 @@ using System.Web.Http;
 using CustomerServices;
 using System.Web.Http.Cors;
 using System.Web.Mvc;
+using System.Threading;
 
 namespace serviceKud.Controllers
 {
         
-    [RequiredHttps]
+    //[RequiredHttps]
     public class CustomerController : ApiController
     {
         // http://localhost:53742/api/customer?gender=male
-        // [DisableCors]
+        [EnableCorsAttribute("*","*","*")]
         [System.Web.Http.HttpGet]
-        public HttpResponseMessage AllGet(string gender="all")
+        [BasicAuthentication]
+        public HttpResponseMessage Get()
         {
             try
             {
+                string username = Thread.CurrentPrincipal.Identity.Name;
                 using (CustomerDBEntities ctx = new CustomerDBEntities())
                 {
-                    switch (gender.ToLower())
+                    
+                    switch (username.ToLower())
                     {
-                        case "all":
-                            return Request.CreateResponse(HttpStatusCode.OK, ctx.Customers.ToList());
+                        
                         case "male":
-                            return Request.CreateResponse(HttpStatusCode.OK, ctx.Customers.Where(x => x.gender == "male").ToList());
+                            return Request.CreateResponse(HttpStatusCode.OK, ctx.Users.Where(x => x.Username == "male").ToList());
                         case "female":
-                            return Request.CreateResponse(HttpStatusCode.OK, ctx.Customers.Where(x => x.gender == "female").ToList());
+                            return Request.CreateResponse(HttpStatusCode.OK, ctx.Users.Where(x => x.Username == "female").ToList());
                         default:
-                            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Select male or female gender");
+                            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Please provide correct credentials");
                     }
 
                 }

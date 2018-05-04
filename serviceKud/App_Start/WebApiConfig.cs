@@ -14,7 +14,8 @@ namespace serviceKud
             EnableCorsAttribute cors = new EnableCorsAttribute("*", "*", "*");
             config.EnableCors(cors);
             // config.Filters.Add(new RequiredHttpsAttribute());
-            config.Filters.Add(new RequiredHttpsAttribute());
+            // config.Filters.Add(new RequiredHttpsAttribute());
+            config.Filters.Add(new BasicAuthenticationAttribute());
             // Web API routes
             config.MapHttpAttributeRoutes();
 
