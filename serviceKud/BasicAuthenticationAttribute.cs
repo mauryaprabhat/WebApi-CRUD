@@ -22,21 +22,28 @@ namespace serviceKud
             }
             else
             {
-                string authToken = actionContext.Request.Headers.Authorization.Parameter;
-                string decodeAuthToken = Encoding.UTF8.GetString(Convert.FromBase64String(authToken));
-                string[] usernamepasswordArray = decodeAuthToken.Split(':');
-                string username = usernamepasswordArray[0];
-                string password = usernamepasswordArray[1];
-               bool loginStatus = CustomerSecurity.Login(username, password);
-                if(loginStatus)
+                string authToken = actionContext.Request.Headers.Authorization.Scheme;                    
+                if (authToken != null)
                 {
-                    Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(username), null);
+                    string decodeAuthToken = Encoding.UTF8.GetString(Convert.FromBase64String(authToken));
+                    string[] usernamepasswordArray = decodeAuthToken.Split(':');
+                    string username = usernamepasswordArray[0];
+                    string password = usernamepasswordArray[1];
+                    bool loginStatus = CustomerSecurity.Login(username, password);
+                    if (loginStatus)
+                    {
+                        Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(username), null);
+                    }
+                    else
+                    {
+                        actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
+                    }
                 }
                 else
                 {
-                    actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
+                    actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.BadRequest, "Bad token");
+                        
                 }
-
             }
            
         }

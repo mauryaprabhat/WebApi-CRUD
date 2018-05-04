@@ -8,10 +8,11 @@
     <script type="text/javascript">
         $(document).ready(function () {
             var ulCustomer = $('#ulCustomer');
-            var username = $('#username');
-            var password = $('#password');
+                       
             
-            $('#getCustomerbtn').click(function () {                
+            $('#getCustomerbtn').click(function () {    
+                var username = $('#username').val();
+                var password = $('#password').val();                
                 $.ajax ({
                     type : 'GET',
                     url: 'http://localhost:53742/api/customer',
@@ -22,13 +23,18 @@
                     success: function (data) {
                         ulCustomer.empty();
                         $.each(data, function (index, val) {
-                            var fullName = val.FirstName.toUpperCase() + ' ' + val.LastName.toUpperCase();
-                            ulCustomer.append('<li>' + fullName + '</li>');                           
+                            console.log('data is- '+data);
+                            console.log(' in success encrypted values is -', btoa(username + ':' + password));
+                           // var fullName = val.FirstName.toUpperCase() + ' ' + val.LastName.toUpperCase();
+                           // window.location.replace("http://localhost:53742/WelcomeCustomer.html");
+                            window.location.href= "/WelcomeCustomer.html";
+                            ulCustomer.append('<li>' + 'Got chaa!! Logined in  value.' + val.Username + '</li>');                           
                         });
                     },
                     complete: function (jqXHR) {
                         if (jqXHR.status == '401') {
-                            ulCustomer.empty();
+                            ulCustomer.empty();                            
+                            console.log( ' in error encrypted values is -', btoa(username + ':' + password));
                             ulCustomer.append('<li style="color:red">'
                                 + jqXHR.status + ' : ' + jqXHR.statusText + '</li>');
                         }
