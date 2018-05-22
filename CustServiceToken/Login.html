@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body style="padding-top:20px">    
+        <!--Table to capture username and password-->
+    <div class="col-md-10 col-md-offset-1">
+        <div class="well">
+            <table class="table table-bordered">
+                <thead>
+                    <tr class="success">
+                        <th colspan="2">
+                            New User Registration
+                            <a href="Register.html" class="btn btn-success pull-right">Register</a>
+                        </th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Usename</td>
+                        <td>
+                            <input type="text" id="txtUsername" placeholder="Username" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Password</td>
+                        <td>
+                            <input type="password" id="txtPassword"
+                                   placeholder="Password" />
+                        </td>
+                    </tr>
+                    <tr class="success">
+                        <td colspan="2">
+                            <input id="btnLogin" class="btn btn-success" type="button"
+                                   value="Login" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!--Bootstrap alert to display error message if the login fails-->
+            <div id="divError" class="alert alert-danger collapse">
+                <a id="linkClose" href="#" class="close">&times;</a>
+                <div id="divErrorText"></div>
+            </div>
+        </div>
+    </div>
+    <script src="Scripts/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#btnLogin').click(function(){
+                $.ajax({
+                url: '/token',
+                method:'POST',
+                contentType:'application/json',
+                data:{
+                    username: $('#txtUsername').val(),
+                    password: $('#txtPassword').val(),
+                    grant_type: 'password'
+                       },
+                    success: function(response){                        
+                        sessionStorage.setItem("accessToken", response.access_token);
+                        // console.log('Object is- ', response);
+                        // console.log('Access Token is-',response.access_token);
+                        window.location.href = "Data.html";
+                       },
+                    error: function(jqXHR){
+                         $('#divErrorText').text(jqXHR.responseText);
+                         $('#divError').show('fade');
+                       }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

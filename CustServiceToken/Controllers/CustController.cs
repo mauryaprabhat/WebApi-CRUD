@@ -8,7 +8,7 @@ using CustomerServices;
 
 namespace CustServiceToken.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class CustController : ApiController
     {
         public HttpResponseMessage Get()
